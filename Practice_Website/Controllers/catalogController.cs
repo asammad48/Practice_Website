@@ -8,7 +8,12 @@ namespace Practice_Website.Controllers
 {
     public class catalogController : Controller
     {
+        
         public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult Product()
         {
             return View();
         }
