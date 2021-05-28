@@ -1,4 +1,4 @@
-﻿
+﻿@model  Practice_Website.Models.Products_With_Categories
 @{
     ViewData["Title"] = "Product";
 }
@@ -21,12 +21,30 @@
             <div class="media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object" src="../assets/img/products/chrome-book-11.jpg" alt="HP Chromebook 11" />
+                        <img class="media-object" src="/assets/img/products/chrome-book-11.jpg" alt="HP Chromebook 11" />
                     </a>
                 </div>
                 <div class="media-body">
-                    <h2 class="h4 media-heading">HP Chromebook 11</h2>
-                    <label>Laptops</label>
+                    <h2 class="h4 media-heading">@Model.Product.ProductName</h2>
+                    @{ var product_variants = @Model.product_variants.Where(e => e.ProductID == @Model.Product.ProductID).ToList();
+                        var new_product_variants = from pv in product_variants
+                                                   join v in Model.variants
+                                                   on pv.VariantID equals v.VariantID
+                                                   select new
+                                                   {
+                                                       Vid=pv.VariantID,
+                                                       VName = v.VariantName,
+                                                       VPrice = pv.Var_Price,
+                                                       Vreview = pv.Var_Reviews,
+                                                       VDiscount = pv.Var_Discount,
+                                                       Vstock = pv.Var_Stock
+                                                   };
+                        var variant_list = new SelectList(new_product_variants, "Vid", "VName");
+                        }
+                    
+                   
+                    @{var subcat = @Model.subCategory_Subs.Where(e => e.SubSubCategoryID == @Model.Product.SubSubCategoryID).Select(e => e.SubCategoryID).FirstOrDefault();}
+                    <label>@Model.subCategories.Where(e=>e.SubCategoryID==@subcat).Select(e=>e.SubCategoryName)</label>
                     <p class="price">$199.99</p>
                 </div>
                 <div class="controls">
@@ -47,7 +65,7 @@
             <div class="media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object" src="../assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 11" />
+                        <img class="media-object" src="/assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 11" />
                     </a>
                 </div>
                 <div class="media-body">
@@ -73,7 +91,7 @@
             <div class="media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object" src="../assets/img/products/ipad-air.jpg" alt="iPad Air" />
+                        <img class="media-object" src="/assets/img/products/ipad-air.jpg" alt="iPad Air" />
                     </a>
                 </div>
                 <div class="media-body">
@@ -99,7 +117,7 @@
             <div class="media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object" src="../assets/img/products/mi-pad-2.jpg" alt="HP Chromebook 11" />
+                        <img class="media-object" src="/assets/img/products/mi-pad-2.jpg" alt="HP Chromebook 11" />
                     </a>
                 </div>
                 <div class="media-body">
@@ -125,7 +143,7 @@
             <div class="media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object" src="../assets/img/products/lenovo-yoga.jpg" alt="Lenovo Yoga" />
+                        <img class="media-object" src="/assets/img/products/lenovo-yoga.jpg" alt="Lenovo Yoga" />
                     </a>
                 </div>
                 <div class="media-body">
@@ -151,7 +169,7 @@
             <div class="media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object" src="../assets/img/products/surface-pro.jpg" alt="HP Chromebook 11" />
+                        <img class="media-object" src="/assets/img/products/surface-pro.jpg" alt="HP Chromebook 11" />
                     </a>
                 </div>
                 <div class="media-body">
@@ -177,7 +195,7 @@
             <div class="media">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object" src="../assets/img/products/asus-transformer.jpg" alt="HP Chromebook 11" />
+                        <img class="media-object" src="/assets/img/products/asus-transformer.jpg" alt="HP Chromebook 11" />
                     </a>
                 </div>
                 <div class="media-body">
@@ -218,7 +236,7 @@
                 </div>
 
                 <div class="col-xs-6 col-sm-6">
-                    <a class="btn btn-primary" href="../checkout/"> Checkout order </a>
+                    <a class="btn btn-primary" href="/checkout/"> Checkout order </a>
                 </div>
             </div>
         </div>
@@ -237,24 +255,24 @@
 
                     <div class="items">
                         <div class="item active" data-marker="1">
-                            <img src="../assets/img/product/1.jpg" alt="ChromeBook 11" />
+                            <img src="/assets/img/product/1.jpg" alt="ChromeBook 11" />
                         </div>
                         <div class="item" data-marker="2">
-                            <img src="../assets/img/product/2.jpg" alt="ChromeBook 11" />
+                            <img src="/assets/img/product/2.jpg" alt="ChromeBook 11" />
                         </div>
                         <div class="item" data-marker="3">
-                            <img src="../assets/img/product/3.jpg" alt="ChromeBook 11" />
+                            <img src="/assets/img/product/3.jpg" alt="ChromeBook 11" />
                         </div>
                         <div class="item" data-marker="4">
-                            <img src="../assets/img/product/4.jpg" alt="ChromeBook 11" />
+                            <img src="/assets/img/product/4.jpg" alt="ChromeBook 11" />
                         </div>
                         <div class="item" data-marker="5">
-                            <img src="../assets/img/product/5.jpg" alt="ChromeBook 11" />
+                            <img src="/assets/img/product/5.jpg" alt="ChromeBook 11" />
                         </div>
                         <div class="item" data-marker="6">
                             <div class="tiles">
                                 <a href="#video" data-gallery="#video" data-source="youtube" data-id="hED0N4CFoqs" data-title="An upscale new Chromebook from HP" data-description="The new HP Chromebook 13 runs a Core M CPU inside a slim aluminum body.">
-                                    <img src="../assets/img/product/video.jpg" alt="ChromeBook 11">
+                                    <img src="/assets/img/product/video.jpg" alt="ChromeBook 11">
 
                                     <div class="overlay"></div>
                                     <div class="content">
@@ -271,20 +289,20 @@
                     </div>
 
                     <ul class="markers">
-                        <li data-marker="1" class="active"><img src="../assets/img/product/1.jpg" alt="Background" /></li>
-                        <li data-marker="2"><img src="../assets/img/product/2.jpg" alt="Background" /></li>
-                        <li data-marker="3"><img src="../assets/img/product/3.jpg" alt="Background" /></li>
-                        <li data-marker="4"><img src="../assets/img/product/4.jpg" alt="Background" /></li>
-                        <li data-marker="5"><img src="../assets/img/product/5.jpg" alt="Background" /></li>
-                        <li data-marker="6"><img src="../assets/img/product/video.jpg" alt="Background" /></li>
+                        <li data-marker="1" class="active"><img src="/assets/img/product/1.jpg" alt="Background" /></li>
+                        <li data-marker="2"><img src="/assets/img/product/2.jpg" alt="Background" /></li>
+                        <li data-marker="3"><img src="/assets/img/product/3.jpg" alt="Background" /></li>
+                        <li data-marker="4"><img src="/assets/img/product/4.jpg" alt="Background" /></li>
+                        <li data-marker="5"><img src="/assets/img/product/5.jpg" alt="Background" /></li>
+                        <li data-marker="6"><img src="/assets/img/product/video.jpg" alt="Background" /></li>
                     </ul>
                 </div>
             </div>
             <div class="col-sm-5 col-md-5">
-                <img src="../assets/img/brands/hp.png" alt="HP" class="brand hidden-xs" />
+                <img src="/assets/img/brands/hp.png" alt="HP" class="brand hidden-xs" />
 
-                <h1>HP Chromebook 11</h1>
-
+                <h1>@Model.Product.ProductName</h1>
+                @Html.DropDownList("Variants", new SelectList(variant_list), "--Choose One---", new { @class = "form-control" })
                 <p> &middot; Chrome OS™</p>
                 <p> &middot; Intel® Celeron® processor</p>
                 <p> &middot; Intel HD Graphics</p>
@@ -301,11 +319,11 @@
 
         <div class="row">
             <div class="col-sm-7">
-                <h1>HP Chromebook 11</h1>
+                <h1>@Model.Product.ProductName</h1>
                 <br>
 
                 <p>
-                    The stylish HP Chromebook provides a speedy connection to your protected online content and automatically updated apps, all within an ultra-thin full-sized notebook, providing a comfortable gateway to surf, socialize and play.
+                    @Model.Product.Description
                 </p>
                 <br>
 
@@ -411,21 +429,21 @@
         <div class="row">
             <div class="col-sm-6 col-md-3 product">
                 <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="../assets/img/products/chrome-book-11.jpg" alt="HP Chromebook 11" /></a>
+                <a href="./"><img src="/assets/img/products/chrome-book-11.jpg" alt="HP Chromebook 11" /></a>
 
                 <div class="content">
                     <h1 class="h4">HP Chromebook 11</h1>
                     <p class="price">$199.99</p>
                     <label>Laptops</label>
 
-                    <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
                     <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
                 </div>
             </div>
 
             <div class="col-sm-6 col-md-3 product">
                 <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="../assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
+                <a href="./"><img src="/assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
 
                 <div class="content">
                     <h1 class="h4">HP Chromebook 14</h1>
@@ -433,21 +451,21 @@
                     <p class="price through">$249.99</p>
                     <label>Laptops</label>
 
-                    <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
                     <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
                 </div>
             </div>
 
             <div class="col-sm-6 col-md-3 product">
                 <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="../assets/img/products/chrome-book-asus.jpg" alt="HP Chromebook 14" /></a>
+                <a href="./"><img src="/assets/img/products/chrome-book-asus.jpg" alt="HP Chromebook 14" /></a>
 
                 <div class="content">
                     <h1 class="h4">Asus Chromebook</h1>
                     <p class="price">$299.99</p>
                     <label>Laptops</label>
 
-                    <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
                     <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
                 </div>
             </div>
@@ -455,14 +473,14 @@
 
             <div class="col-sm-6 col-md-3 product">
                 <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="../assets/img/products/ipad-air.jpg" alt="iPad Air" /></a>
+                <a href="./"><img src="/assets/img/products/ipad-air.jpg" alt="iPad Air" /></a>
 
                 <div class="content">
                     <h1 class="h4">iPad Air</h1>
                     <p class="price">$449.99</p>
                     <label>Tablets</label>
 
-                    <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
                     <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
                 </div>
             </div>
