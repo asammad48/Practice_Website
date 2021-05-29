@@ -1,0 +1,81 @@
+﻿@model Practice_Website.Models.Products_With_Categories
+
+@{ 
+    var subCategry = Model.category_Subs.Where(e => e.CategoryID == 1).Select(e => e.SubCategoryID).ToList();
+    var subsubCategory = Model.subCategory_Subs.Where(e => subCategry.Contains(e.SubCategoryID)).Select(e => e.SubSubCategoryID).ToList();
+    var Product = Model.products.Where(e => subsubCategory.Contains(e.SubSubCategoryID)).ToList();
+    foreach(var item in Product)
+    {
+    <div class="col-sm-6 col-md-4 product">
+        <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+        <a href="./"><img src="../assets/img/products/surface-pro.jpg" alt="Surface Pro" /></a>
+
+        <div class="content">
+            <h1 class="h4">@item.ProductName</h1>
+            
+            <p class="price">4632</p>
+            <label>@Model.subSubCategories.Where(e=>e.SubSubCategoryID==item.SubSubCategoryID).Select(e=>e.SubsUBCategoryName).FirstOrDefault()</label>
+
+            @Html.ActionLink("Default","Product","catalog",new { @id=item.ProductID,@variant=0},new { @class="btn btn-link"})
+            <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+        </div>
+    </div>
+    }
+}
+
+<div class="col-sm-6 col-md-4 product">
+    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+    <a href="./"><img src="../assets/img/products/surface-pro.jpg" alt="Surface Pro" /></a>
+
+    <div class="content">
+        <h1 class="h4">Surface Pro</h1>
+        <p class="price">$199.99</p>
+        <label>Hybrid</label>
+
+        <a href="../catalog/product" class="btn btn-link"> Details</a>
+        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+    </div>
+</div>
+
+<div class="col-sm-6 col-md-4 product">
+    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+    <a href="./"><img src="../assets/img/products/lenovo-yoga.jpg" alt="Lenovo Yoga" /></a>
+
+    <div class="content">
+        <h1 class="h4">Lenovo Yoga</h1>
+        <p class="price">$199.99</p>
+        <label>Hybrid</label>
+
+        <a href="../catalog/Product" class="btn btn-link"> Details</a>
+        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+    </div>
+</div>
+
+<div class="col-sm-6 col-md-4 product">
+    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+    <a href="./"><img src="../assets/img/products/asus-transformer.jpg" alt="ASUS Transformer" /></a>
+
+    <div class="content">
+        <h1 class="h4">ASUS Transformer</h1>
+        <p class="price">$199.99</p>
+        <label>Hybrid</label>
+
+        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+    </div>
+</div>
+
+<div class="col-sm-6 col-md-4 product hidden-md hidden-lg">
+    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+    <a href="./"><img src="../assets/img/products/mi-pad-2.jpg" alt="Mi Pad 2/"></a>
+
+    <div class="content">
+        <h1 class="h4">Mi Pad 2</h1>
+        <p class="sale">$199.99</p>
+        <p class="price through">$249.99</p>
+        <label>Tablets</label>
+
+        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+    </div>
+</div>

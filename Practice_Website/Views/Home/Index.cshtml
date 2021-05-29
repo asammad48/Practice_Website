@@ -148,66 +148,16 @@
 <hr class="offset-lg">
 
 <div class="container">
-    <h2>NEW PRODUCTS</h2>
+    @* Change Area *@
+    <div class="row">
+        <h2 class="col-md-6">NEW PRODUCTS</h2>
+        @Html.DropDownList("Categories", new SelectList(Model.categories,"CategoryID","CategoryName"),new { @class="form-control"})
+    </div>
+    @* End Change Area *@
     <hr class="offset-md">
 
     <div class="row products">
-        <div class="col-sm-6 col-md-4 product">
-            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-            <a href="./"><img src="../assets/img/products/surface-pro.jpg" alt="Surface Pro" /></a>
-
-            <div class="content">
-                <h1 class="h4">Surface Pro</h1>
-                <p class="price">$199.99</p>
-                <label>Hybrid</label>
-
-                <a href="../catalog/product" class="btn btn-link"> Details</a>
-                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-md-4 product">
-            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-            <a href="./"><img src="../assets/img/products/lenovo-yoga.jpg" alt="Lenovo Yoga" /></a>
-
-            <div class="content">
-                <h1 class="h4">Lenovo Yoga</h1>
-                <p class="price">$199.99</p>
-                <label>Hybrid</label>
-
-                <a href="../catalog/Product" class="btn btn-link"> Details</a>
-                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-md-4 product">
-            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-            <a href="./"><img src="../assets/img/products/asus-transformer.jpg" alt="ASUS Transformer" /></a>
-
-            <div class="content">
-                <h1 class="h4">ASUS Transformer</h1>
-                <p class="price">$199.99</p>
-                <label>Hybrid</label>
-
-                <a href="../catalog/product.html" class="btn btn-link"> Details</a>
-                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-md-4 product hidden-md hidden-lg">
-            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-            <a href="./"><img src="../assets/img/products/mi-pad-2.jpg" alt="Mi Pad 2/"></a>
-
-            <div class="content">
-                <h1 class="h4">Mi Pad 2</h1>
-                <p class="sale">$199.99</p>
-                <p class="price through">$249.99</p>
-                <label>Tablets</label>
-
-                <a href="../catalog/product.html" class="btn btn-link"> Details</a>
-                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-            </div>
-        </div>
+        @Html.Partial("New_Products.cshtml", @Model);
     </div>
 </div>
 
@@ -219,7 +169,7 @@
         @{
             foreach (var item in Model.products)
             {
-                <div class="col-sm-6 col-md-3 product product_card " style="white-space: nowrap;overflow: hidden; text-overflow: ellipsis;">
+                <div class="col-sm-6 col-md-3 product product_card product_card_overflow " style="white-space: nowrap;overflow: hidden; text-overflow: ellipsis; display:none;">
                     <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
                     <a href="#"><img src="../assets/img/products/chrome-book-11.jpg" alt="HP Chromebook 11" /></a>
 
@@ -235,7 +185,7 @@
                         <label>@Model.subSubCategories.Where(e => e.SubSubCategoryID == @item.SubSubCategoryID).Select(e => e.SubsUBCategoryName).FirstOrDefault()</label>
 
                         @*<a class="btn btn-link detail_product" data-id="@item.ProductID" > Detail</a>*@
-                        @Html.ActionLink("Detail", "Product", "catalog", new { id = @item.ProductID, variant = 1},new { @class="btn btn-link"})
+                        @Html.ActionLink("Detail", "Product", "catalog", new { id = @item.ProductID, variant = 0},new { @class="btn btn-link"})
                         <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
                     </div>
                 </div>
@@ -286,6 +236,9 @@
                 <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
             </div>
         </div>*@
+    </div>
+    <div class="container" style="text-align:center">
+        <a class="btn btn-link" style="text-align:center;margin-top:20px; align-items:center" id="Product_Card_See_More" onclick="Expand_Product_Card()">See More...</a>
     </div>
 </div>
 
@@ -344,3 +297,25 @@
 </div>
 <hr class="offset-lg">
 <hr class="offset-lg">
+<script type="text/javascript">
+    debugger;
+    function Expand_Product_Card() {
+        var cards_dispaly = document.getElementsByClassName('product_card_overflow');
+        for (var i = 0; i < total_card_to_display && cards_dispaly.length; i++)
+        {
+             cards_dispaly[i].style.display = "block";
+        }
+        total_card_to_display = total_card_to_display + 8;
+    }
+</script>
+<script>
+    var total_card_to_display = 4;
+        document.getElementsByClassName('product_card_overflow').onload = function () { myFunction() };
+         var cards_dispaly = document.getElementsByClassName('product_card_overflow');
+         for (var i = 0; i < total_card_to_display && cards_dispaly.length; i++)
+         {
+        cards_dispaly[i].style.display = "block";
+        }
+        total_card_to_display = total_card_to_display + 8;
+    
+</script>

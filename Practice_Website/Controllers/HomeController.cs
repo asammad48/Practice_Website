@@ -20,7 +20,7 @@ namespace Practice_Website.Controllers
 
             using (var client = new HttpClient())
             {
-                //Passing service base url  
+               
                 client.BaseAddress = new Uri(Baseurl);
 
                 client.DefaultRequestHeaders.Clear();
@@ -40,6 +40,7 @@ namespace Practice_Website.Controllers
                     Products_with_categories = JsonConvert.DeserializeObject<Products_With_Categories>(All_Product);
 
                 }
+
                 //returning the employee list to view  
                 return View(Products_with_categories);
             }
