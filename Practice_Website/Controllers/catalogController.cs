@@ -17,17 +17,16 @@ namespace Practice_Website.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Product(int id)
+        public async Task<IActionResult> Product(int id,int variant)
         {
             Product p = new Product();
 
             using (var client = new HttpClient())
             {
-                //Passing service base url  
                 client.BaseAddress = new Uri(Baseurl);
 
                 client.DefaultRequestHeaders.Clear();
-                //Define request data format  
+                
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
@@ -50,27 +49,32 @@ namespace Practice_Website.Controllers
 
             using (var client = new HttpClient())
             {
-                //Passing service base url  
+               
                 client.BaseAddress = new Uri(Baseurl);
 
                 client.DefaultRequestHeaders.Clear();
-                //Define request data format  
+               
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
+               
                 HttpResponseMessage Res = await client.GetAsync("api/Home");
 
-                //Checking the response is successful or not which is sent using HttpClient  
+              
                 if (Res.IsSuccessStatusCode)
                 {
-                    //Storing the response details recieved from web api   
+                   
                     var All_Product = Res.Content.ReadAsStringAsync().Result;
 
-                    //Deserializing the response recieved from web api and storing into the Employee list  
+                 
                     Products_with_categories = JsonConvert.DeserializeObject<Products_With_Categories>(All_Product);
 
                 }
             }
+            if(variant==0)
+            {
+                Products_with_categories.Variant = Products_with_categories.product_variants.Where(e => e.ProductID == id).Select(e => e.VariantID).FirstOrDefault();
+            }
+            Products_with_categories.Variant = variant;
             Products_with_categories.Product = p;
             return View(Products_with_categories);
         }

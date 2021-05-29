@@ -16,6 +16,7 @@ namespace Practice_Website.Models
         public List<SubSubCategory> subSubCategories { get; set; }
         public List<SubCategory_SubSubcategory> subCategory_Subs { get; set; }
         public Product Product { get; set; }
+        public int Variant { get; set; }
         public List<Specification> specifications { get; set; }
     }
 }

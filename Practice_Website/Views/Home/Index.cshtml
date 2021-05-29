@@ -235,7 +235,7 @@
                         <label>@Model.subSubCategories.Where(e => e.SubSubCategoryID == @item.SubSubCategoryID).Select(e => e.SubsUBCategoryName).FirstOrDefault()</label>
 
                         @*<a class="btn btn-link detail_product" data-id="@item.ProductID" > Detail</a>*@
-                        @Html.ActionLink("Detail","Product","catalog",new { id=@item.ProductID})
+                        @Html.ActionLink("Detail", "Product", "catalog", new { id = @item.ProductID, variant = 1},new { @class="btn btn-link"})
                         <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
                     </div>
                 </div>

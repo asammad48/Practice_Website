@@ -13,5 +13,6 @@ namespace Practice_Website.Models
         public int VariantID { get; set; }
         public string SpecName { get; set; }
         public string SpecValue { get; set; }
+        public int top { get; set; }
     }
 }

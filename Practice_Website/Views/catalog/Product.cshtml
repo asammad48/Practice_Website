@@ -27,24 +27,13 @@
                 <div class="media-body">
                     <h2 class="h4 media-heading">@Model.Product.ProductName</h2>
                     @{ var product_variants = @Model.product_variants.Where(e => e.ProductID == @Model.Product.ProductID).ToList();
-                        var new_product_variants = from pv in product_variants
-                                                   join v in Model.variants
-                                                   on pv.VariantID equals v.VariantID
-                                                   select new
-                                                   {
-                                                       Vid=pv.VariantID,
-                                                       VName = v.VariantName,
-                                                       VPrice = pv.Var_Price,
-                                                       Vreview = pv.Var_Reviews,
-                                                       VDiscount = pv.Var_Discount,
-                                                       Vstock = pv.Var_Stock
-                                                   };
-                        var variant_list = new SelectList(new_product_variants, "Vid", "VName");
+                        var variant_id_list = @Model.product_variants.Where(e => e.ProductID == @Model.Product.ProductID).Select(e => e.VariantID).ToList();
+                        var variants = @Model.variants.Where(e => variant_id_list.Contains(e.VariantID)).ToList();
                         }
                     
                    
                     @{var subcat = @Model.subCategory_Subs.Where(e => e.SubSubCategoryID == @Model.Product.SubSubCategoryID).Select(e => e.SubCategoryID).FirstOrDefault();}
-                    <label>@Model.subCategories.Where(e=>e.SubCategoryID==@subcat).Select(e=>e.SubCategoryName)</label>
+                    <label>@Model.subCategories.Where(e => e.SubCategoryID == @subcat).Select(e => e.SubCategoryName)</label>
                     <p class="price">$199.99</p>
                 </div>
                 <div class="controls">
@@ -302,16 +291,40 @@
                 <img src="/assets/img/brands/hp.png" alt="HP" class="brand hidden-xs" />
 
                 <h1>@Model.Product.ProductName</h1>
-                @Html.DropDownList("Variants", new SelectList(variant_list), "--Choose One---", new { @class = "form-control" })
-                <p> &middot; Chrome OS™</p>
-                <p> &middot; Intel® Celeron® processor</p>
-                <p> &middot; Intel HD Graphics</p>
+                @Html.DropDownList(Model.Product.ProductID.ToString(), new SelectList(variants, "VariantID", "VariantName", @Model.Variant), new { @class = "form-control mb-4",@id="drop" ,@style="margin-bottom:20px" })
+               
+                @*<select class="form-control">
+            @{
+                foreach (var item in variants)
+                {
 
-                <p class="price">$209.99</p>
-                <p class="price through">$249.99</p>
+                    if (item.VariantID == Model.Variant)
+                    {
+                        Selected = "selected";
+                    }
+                    <option value="@item.VariantID" @Selected>@item.VariantName</option>
+                    Selected = "";
+                }
+            }
+        </select>*@
+            <p> &middot; @Model.specifications.Where(e => e.ProductID == Model.Product.ProductID && e.VariantID == Model.Variant && e.top == 1).Select(e => e.SpecValue).FirstOrDefault()</p>
+            <p> &middot; @Model.specifications.Where(e => e.ProductID == Model.Product.ProductID && e.VariantID == Model.Variant && e.top == 2).Select(e => e.SpecValue).FirstOrDefault()</p>
+            <p> &middot; @Model.specifications.Where(e => e.ProductID == Model.Product.ProductID && e.VariantID == Model.Variant && e.top == 3).Select(e => e.SpecValue).FirstOrDefault()</p>
+
+                <p class="price">@Model.product_variants.Where(e => e.ProductID == Model.Product.ProductID && e.VariantID == Model.Variant).Select(e => e.Var_Price).FirstOrDefault()</p>
+                @{ var price_discount = Model.product_variants.Where(e => e.ProductID == Model.Product.ProductID && e.VariantID == Model.Variant).Select(e => e.Var_Price).FirstOrDefault() + Model.product_variants.Where(e => e.ProductID == Model.Product.ProductID && e.VariantID == Model.Variant).Select(e => e.Var_Discount).FirstOrDefault();
+                    var stock = Model.product_variants.Where(e => e.ProductID == Model.Product.ProductID && e.VariantID == Model.Variant).Select(e => e.Var_Stock).FirstOrDefault();}
+                <p class="price through">@price_discount</p>
                 <br><br>
+                @* Add Quntity Button *@
 
-                <button class="btn btn-primary btn-rounded"> <i class="ion-bag"></i> Add to cart</button>
+                <div class="row">
+                    <div class="col-sm-3" style="border:none"><label class="form-control" style="border:none">Quantity</label></div>
+                    <div class="col-sm-9"><input type="text" placeholder="Quantity will not More than @stock units " name="Qunatity" class="form-control"/></div>
+                </div>
+
+                @* Add Quantity Button end *@
+                <button class="btn btn-primary btn-rounded" style="margin-top:10px"> <i class="ion-bag"></i> Add to cart</button>
             </div>
         </div>
         <br><br><br>
@@ -329,51 +342,57 @@
 
                 <h2>Product specifications</h2>
                 <br>
+                @{ foreach (var item in Model.specifications.Where(e => e.ProductID == Model.Product.ProductID && e.VariantID == Model.Variant).ToList())
 
-                <div class="row specification">
-                    <div class="col-sm-6"> <label>Operating system</label> </div>
-                    <div class="col-sm-6"> <p>Chrome OS™</p> </div>
-                </div>
+                    {
+                        <div class="row specification">
+                            <div class="col-sm-6"> <label>@item.SpecName</label> </div>
+                            <div class="col-sm-6"> <p>@item.SpecValue</p> </div>
+                        </div>
+                    }
 
-                <div class="row specification">
-                    <div class="col-sm-6"> <label>Processor</label> </div>
-                    <div class="col-sm-6"> <p>Intel® Celeron® N2840 with Intel® HD Graphics (2.16 GHz, up to 2.58 GHz, 1 MB cache, 2 cores)</p> </div>
-                </div>
+                }
 
-                <div class="row specification">
-                    <div class="col-sm-6"> <label>Processor technology</label> </div>
-                    <div class="col-sm-6"> <p>Intel Turbo Boost Technology</p> </div>
-                </div>
 
-                <div class="row specification">
-                    <div class="col-sm-6"> <label>Graphics</label> </div>
-                    <div class="col-sm-6"> <p>Intel HD Graphics</p> </div>
-                </div>
+                @*<div class="row specification">
+            <div class="col-sm-6"> <label>Processor</label> </div>
+            <div class="col-sm-6"> <p>Intel® Celeron® N2840 with Intel® HD Graphics (2.16 GHz, up to 2.58 GHz, 1 MB cache, 2 cores)</p> </div>
+        </div>
 
-                <div class="row specification">
-                    <div class="col-sm-6"> <label>Memory</label> </div>
-                    <div class="col-sm-6"> <p>2 GB DDR3L SDRAM (onboard)</p> </div>
-                </div>
+        <div class="row specification">
+            <div class="col-sm-6"> <label>Processor technology</label> </div>
+            <div class="col-sm-6"> <p>Intel Turbo Boost Technology</p> </div>
+        </div>
 
-                <div class="row specification">
-                    <div class="col-sm-6"> <label>Hard drive</label> </div>
-                    <div class="col-sm-6"> <p>16 GB eMMC</p> </div>
-                </div>
+        <div class="row specification">
+            <div class="col-sm-6"> <label>Graphics</label> </div>
+            <div class="col-sm-6"> <p>Intel HD Graphics</p> </div>
+        </div>
 
-                <div class="row specification">
-                    <div class="col-sm-6"> <label>Wireless</label> </div>
-                    <div class="col-sm-6"> <p>802.11ac (2x2) and Bluetooth® 4.0 combo</p> </div>
-                </div>
+        <div class="row specification">
+            <div class="col-sm-6"> <label>Memory</label> </div>
+            <div class="col-sm-6"> <p>2 GB DDR3L SDRAM (onboard)</p> </div>
+        </div>
 
-                <div class="row specification">
-                    <div class="col-sm-6"> <label>Power supply</label> </div>
-                    <div class="col-sm-6"> <p>45 W AC power adapter</p> </div>
-                </div>
+        <div class="row specification">
+            <div class="col-sm-6"> <label>Hard drive</label> </div>
+            <div class="col-sm-6"> <p>16 GB eMMC</p> </div>
+        </div>
 
-                <div class="row specification">
-                    <div class="col-sm-6"> <label>Battery</label> </div>
-                    <div class="col-sm-6"> <p>3-cell, 36 Wh Li-ion</p> </div>
-                </div>
+        <div class="row specification">
+            <div class="col-sm-6"> <label>Wireless</label> </div>
+            <div class="col-sm-6"> <p>802.11ac (2x2) and Bluetooth® 4.0 combo</p> </div>
+        </div>
+
+        <div class="row specification">
+            <div class="col-sm-6"> <label>Power supply</label> </div>
+            <div class="col-sm-6"> <p>45 W AC power adapter</p> </div>
+        </div>
+
+        <div class="row specification">
+            <div class="col-sm-6"> <label>Battery</label> </div>
+            <div class="col-sm-6"> <p>3-cell, 36 Wh Li-ion</p> </div>
+        </div>*@
             </div>
             <div class="col-sm-5">
                 <div class="comments">
@@ -425,67 +444,84 @@
 <section class="products">
     <div class="container">
         <h1 class="h3">Recommendation for you</h1>
-
         <div class="row">
-            <div class="col-sm-6 col-md-3 product">
-                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="/assets/img/products/chrome-book-11.jpg" alt="HP Chromebook 11" /></a>
+            @{ var product_same_subcat = Model.subCategory_Subs.Where(e => e.SubCategoryID == subcat).Select(e => e.SubSubCategoryID).ToList();
+                var subsub_cat_product = Model.products.Where(e => product_same_subcat.Contains(e.SubSubCategoryID)).ToList();
+                foreach (var item in subsub_cat_product)
+                {
+                    <div class="col-sm-6 col-md-3 product">
+                        <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                        <a href="./"><img src="/assets/img/products/chrome-book-11.jpg" alt="HP Chromebook 11" /></a>
 
-                <div class="content">
-                    <h1 class="h4">HP Chromebook 11</h1>
-                    <p class="price">$199.99</p>
-                    <label>Laptops</label>
+                        <div class="content">
+                            <h1 class="h4">HP Chromebook 11</h1>
+                            <p class="price">$199.99</p>
+                            <label>Laptops</label>
 
-                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
-                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-                </div>
+                            <a href="/catalog/product.html" class="btn btn-link"> Details</a>
+                            <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                        </div>
+                    </div>
+                }
+            }
+
+
+
+
+            @*<div class="col-sm-6 col-md-3 product">
+            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+            <a href="./"><img src="/assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
+
+            <div class="content">
+                <h1 class="h4">HP Chromebook 14</h1>
+                <p class="sale">$209.99</p>
+                <p class="price through">$249.99</p>
+                <label>Laptops</label>
+
+                <a href="/catalog/product.html" class="btn btn-link"> Details</a>
+                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
             </div>
+        </div>
 
-            <div class="col-sm-6 col-md-3 product">
-                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="/assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
+        <div class="col-sm-6 col-md-3 product">
+            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+            <a href="./"><img src="/assets/img/products/chrome-book-asus.jpg" alt="HP Chromebook 14" /></a>
 
-                <div class="content">
-                    <h1 class="h4">HP Chromebook 14</h1>
-                    <p class="sale">$209.99</p>
-                    <p class="price through">$249.99</p>
-                    <label>Laptops</label>
+            <div class="content">
+                <h1 class="h4">Asus Chromebook</h1>
+                <p class="price">$299.99</p>
+                <label>Laptops</label>
 
-                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
-                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-                </div>
+                <a href="/catalog/product.html" class="btn btn-link"> Details</a>
+                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
             </div>
+        </div>
 
-            <div class="col-sm-6 col-md-3 product">
-                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="/assets/img/products/chrome-book-asus.jpg" alt="HP Chromebook 14" /></a>
 
-                <div class="content">
-                    <h1 class="h4">Asus Chromebook</h1>
-                    <p class="price">$299.99</p>
-                    <label>Laptops</label>
+        <div class="col-sm-6 col-md-3 product">
+            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+            <a href="./"><img src="/assets/img/products/ipad-air.jpg" alt="iPad Air" /></a>
 
-                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
-                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-                </div>
+            <div class="content">
+                <h1 class="h4">iPad Air</h1>
+                <p class="price">$449.99</p>
+                <label>Tablets</label>
+
+                <a href="/catalog/product.html" class="btn btn-link"> Details</a>
+                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
             </div>
-
-
-            <div class="col-sm-6 col-md-3 product">
-                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="/assets/img/products/ipad-air.jpg" alt="iPad Air" /></a>
-
-                <div class="content">
-                    <h1 class="h4">iPad Air</h1>
-                    <p class="price">$449.99</p>
-                    <label>Tablets</label>
-
-                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
-                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-                </div>
-            </div>
+        </div>*@
         </div>
     </div>
 </section>
 <br><br>
+<script type="text/javascript">
+$("#drop").change(function () {
+    var end = this.value;
+    console.log(end);
+    var name_name = $(this).prop("name");
+    console.log(name_name);
+    window.location.replace("./" + name_name + "?Variant=" + end);
+});
 
+</script>]
