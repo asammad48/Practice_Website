@@ -74,7 +74,11 @@ namespace Practice_Website.Controllers
             {
                 Products_with_categories.Variant = Products_with_categories.product_variants.Where(e => e.ProductID == id).Select(e => e.VariantID).FirstOrDefault();
             }
-            Products_with_categories.Variant = variant;
+            else
+            {
+                Products_with_categories.Variant = variant;
+            }
+            
             Products_with_categories.Product = p;
             return View(Products_with_categories);
         }

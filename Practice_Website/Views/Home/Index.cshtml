@@ -151,12 +151,12 @@
     @* Change Area *@
     <div class="row">
         <h2 class="col-md-6">NEW PRODUCTS</h2>
-        @Html.DropDownList("Categories", new SelectList(Model.categories,"CategoryID","CategoryName"),new { @class="form-control"})
+        @Html.DropDownList("Categories", new SelectList(Model.categories,"CategoryID","CategoryName"),new { @class="form-control",@id="category_ddl"})
     </div>
     @* End Change Area *@
     <hr class="offset-md">
 
-    <div class="row products">
+    <div class="row products" id="partial_view_new_products">
         @Html.Partial("New_Products.cshtml", @Model);
     </div>
 </div>
@@ -306,7 +306,21 @@
              cards_dispaly[i].style.display = "block";
         }
         total_card_to_display = total_card_to_display + 8;
+      
     }
+    $("#category_ddl").change(function () {
+        var end =this.value;
+          $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetProductByCategories", "Home", null)",
+                    data: { id: end },
+                    contentType: 'application/json; charset=utf-8',
+              success: function myfunction(Response) {
+                  $("#partial_view_new_products").html(Response)
+                    }, error: function (request, status, error) {
+                    }
+                });
+    });
 </script>
 <script>
     var total_card_to_display = 4;
