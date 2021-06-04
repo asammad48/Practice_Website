@@ -18,5 +18,6 @@ namespace Practice_Website.Models
         public Product Product { get; set; }
         public int Variant { get; set; }
         public List<Specification> specifications { get; set; }
+        public List<Product_Images> product_Images { get; set; }
     }
 }

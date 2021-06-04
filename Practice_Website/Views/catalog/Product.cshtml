@@ -2,7 +2,9 @@
 @{
     ViewData["Title"] = "Product";
 }
-
+@{
+    string images_path_local = "https://localhost:44365/uploads/";
+}
 <div class="cart" data-toggle="inactive">
     <div class="label">
         <i class="ion-bag"></i> 7
@@ -278,6 +280,11 @@
                     </div>
 
                     <ul class="markers">
+                        @{ 
+                            var Product_id = Model.Product.ProductID;
+                            var Product_images = Model.product_Images.Where(e => e.ProductID == Product_id).ToList();
+
+                        }
                         <li data-marker="1" class="active"><img src="/assets/img/product/1.jpg" alt="Background" /></li>
                         <li data-marker="2"><img src="/assets/img/product/2.jpg" alt="Background" /></li>
                         <li data-marker="3"><img src="/assets/img/product/3.jpg" alt="Background" /></li>
@@ -469,48 +476,48 @@
 
 
             @*<div class="col-sm-6 col-md-3 product">
-                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="/assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="/assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
 
-                <div class="content">
-                    <h1 class="h4">HP Chromebook 14</h1>
-                    <p class="sale">$209.99</p>
-                    <p class="price through">$249.99</p>
-                    <label>Laptops</label>
+                    <div class="content">
+                        <h1 class="h4">HP Chromebook 14</h1>
+                        <p class="sale">$209.99</p>
+                        <p class="price through">$249.99</p>
+                        <label>Laptops</label>
 
-                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
-                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                        <a href="/catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-sm-6 col-md-3 product">
-                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="/assets/img/products/chrome-book-asus.jpg" alt="HP Chromebook 14" /></a>
+                <div class="col-sm-6 col-md-3 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="/assets/img/products/chrome-book-asus.jpg" alt="HP Chromebook 14" /></a>
 
-                <div class="content">
-                    <h1 class="h4">Asus Chromebook</h1>
-                    <p class="price">$299.99</p>
-                    <label>Laptops</label>
+                    <div class="content">
+                        <h1 class="h4">Asus Chromebook</h1>
+                        <p class="price">$299.99</p>
+                        <label>Laptops</label>
 
-                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
-                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                        <a href="/catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
                 </div>
-            </div>
 
 
-            <div class="col-sm-6 col-md-3 product">
-                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                <a href="./"><img src="/assets/img/products/ipad-air.jpg" alt="iPad Air" /></a>
+                <div class="col-sm-6 col-md-3 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="/assets/img/products/ipad-air.jpg" alt="iPad Air" /></a>
 
-                <div class="content">
-                    <h1 class="h4">iPad Air</h1>
-                    <p class="price">$449.99</p>
-                    <label>Tablets</label>
+                    <div class="content">
+                        <h1 class="h4">iPad Air</h1>
+                        <p class="price">$449.99</p>
+                        <label>Tablets</label>
 
-                    <a href="/catalog/product.html" class="btn btn-link"> Details</a>
-                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-                </div>
-            </div>*@
+                        <a href="/catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>*@
         </div>
         <div class="container" style="text-align:center">
             <a class="btn btn-link" style="text-align:center;margin-top:20px; align-items:center" id="Product_Card_See_More" onclick="Expand_Product_Card()">See More...</a>
@@ -532,9 +539,8 @@
     debugger;
     function Expand_Product_Card() {
         var cards_dispaly = document.getElementsByClassName('product_card_overflow');
-        for (var i = 0; i < total_card_to_display && cards_dispaly.length; i++)
-        {
-             cards_dispaly[i].style.display = "block";
+        for (var i = 0; i < total_card_to_display && cards_dispaly.length; i++) {
+            cards_dispaly[i].style.display = "block";
         }
         total_card_to_display = total_card_to_display + 8;
 

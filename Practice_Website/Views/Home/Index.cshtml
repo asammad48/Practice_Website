@@ -1,8 +1,10 @@
-﻿@model  Practice_Website.Models.Products_With_Categories
+﻿@model Practice_Website.Models.Products_With_Categories
 @{
     ViewData["Title"] = "Home Page";
 }
-
+@{
+    string images_path_local = "https://localhost:44365/uploads/";
+}
 <header>
     <div class="carousel" data-count="3" data-current="2">
         <!-- <button class="btn btn-control"></button> -->
@@ -96,8 +98,8 @@
 
 <div class="container">
     <div class="row">
-        @{ 
-            foreach(var list_cat in Model.categories)
+        @{
+            foreach (var list_cat in Model.categories)
             {
                 <div class="col-sm-3 align-center">
                     <a href="../blog/">
@@ -107,41 +109,41 @@
 
                     <a href="../blog/">@list_cat.CategoryName</a>
                 </div>
-            
+
             }
         }
         @*<div class="col-sm-3 align-center">
-            <a href="../blog/">
-                <img src="../assets/img/tiles/blog.jpg" alt="Blog" class="image" />
-            </a>
-            <br><br>
+                <a href="../blog/">
+                    <img src="../assets/img/tiles/blog.jpg" alt="Blog" class="image" />
+                </a>
+                <br><br>
 
-            <a href="../blog/">Blog headlines</a>
-        </div>*@
+                <a href="../blog/">Blog headlines</a>
+            </div>*@
         @*<div class="col-sm-3 align-center">
-            <a href="#video" data-gallery="#video" data-source="vimeo" data-id="110691368" data-id="110691368" data-title="Apple iPad Air" data-description="So capable, you won’t want to put it down. So thin and light, you won’t have to.">
-                <img src="../assets/img/tiles/video-apple.jpg" alt="New devices" class="image" />
-            </a>
-            <br><br>
+                <a href="#video" data-gallery="#video" data-source="vimeo" data-id="110691368" data-id="110691368" data-title="Apple iPad Air" data-description="So capable, you won’t want to put it down. So thin and light, you won’t have to.">
+                    <img src="../assets/img/tiles/video-apple.jpg" alt="New devices" class="image" />
+                </a>
+                <br><br>
 
-            <a href="#video" data-gallery="#video" data-source="vimeo" data-id="110691368" data-title="Apple iPad Air" data-description="So capable, you won’t want to put it down. So thin and light, you won’t have to.">New apple diveces</a>
-        </div>
-        <div class="col-sm-3 align-center">
-            <a href="#video" data-gallery="#video" data-source="youtube" data-id="6g-ZIm0wge4" data-title="Best New Dell Laptops" data-description="Best of dell's laptops that you can consider buying in 2016. 4 Laptops are featured in the video and all of them has equal importance and there is no order that #1 is better than #2">
-                <img src="../assets/img/tiles/video-dell.jpg" alt="Del XPS" class="image" />
-            </a>
-            <br><br>
+                <a href="#video" data-gallery="#video" data-source="vimeo" data-id="110691368" data-title="Apple iPad Air" data-description="So capable, you won’t want to put it down. So thin and light, you won’t have to.">New apple diveces</a>
+            </div>
+            <div class="col-sm-3 align-center">
+                <a href="#video" data-gallery="#video" data-source="youtube" data-id="6g-ZIm0wge4" data-title="Best New Dell Laptops" data-description="Best of dell's laptops that you can consider buying in 2016. 4 Laptops are featured in the video and all of them has equal importance and there is no order that #1 is better than #2">
+                    <img src="../assets/img/tiles/video-dell.jpg" alt="Del XPS" class="image" />
+                </a>
+                <br><br>
 
-            <a href="#video" data-gallery="#video" data-source="youtube" data-id="6g-ZIm0wge4" data-title="Best New Dell Laptops" data-description="Best of dell's laptops that you can consider buying in 2016. 4 Laptops are featured in the video and all of them has equal importance and there is no order that #1 is better than #2">Brend new DELL XPS</a>
-        </div>
-        <div class="col-sm-3 align-center">
-            <a href="../blog/">
-                <img src="../assets/img/tiles/gallery.jpg" alt="Gallery" class="image" />
-            </a>
-            <br><br>
+                <a href="#video" data-gallery="#video" data-source="youtube" data-id="6g-ZIm0wge4" data-title="Best New Dell Laptops" data-description="Best of dell's laptops that you can consider buying in 2016. 4 Laptops are featured in the video and all of them has equal importance and there is no order that #1 is better than #2">Brend new DELL XPS</a>
+            </div>
+            <div class="col-sm-3 align-center">
+                <a href="../blog/">
+                    <img src="../assets/img/tiles/gallery.jpg" alt="Gallery" class="image" />
+                </a>
+                <br><br>
 
-            <a href="../blog/">Products gallery</a>
-        </div>*@
+                <a href="../blog/">Products gallery</a>
+            </div>*@
     </div>
 </div>
 <hr class="offset-lg">
@@ -151,7 +153,7 @@
     @* Change Area *@
     <div class="row">
         <h2 class="col-md-6">NEW PRODUCTS</h2>
-        @Html.DropDownList("Categories", new SelectList(Model.categories,"CategoryID","CategoryName"),new { @class="form-control",@id="category_ddl"})
+        @Html.DropDownList("Categories", new SelectList(Model.categories, "CategoryID", "CategoryName"), new { @class = "form-control", @id = "category_ddl" })
     </div>
     @* End Change Area *@
     <hr class="offset-md">
@@ -171,21 +173,24 @@
             {
                 <div class="col-sm-6 col-md-3 product product_card product_card_overflow " style="white-space: nowrap;overflow: hidden; text-overflow: ellipsis; display:none;">
                     <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-                    <a href="#"><img src="../assets/img/products/chrome-book-11.jpg" alt="HP Chromebook 11" /></a>
+                    @{
+                        var images_url = images_path_local + Model.product_Images.Where(e => e.ProductID == item.ProductID).Select(e => e.Images).FirstOrDefault();
+                    }
+                    <a href="#"><img src="@images_url" alt="@item.ProductName" /></a>
 
                     <div class="content">
                         <h1 class="h4">@item.ProductName</h1>
                         @{var discount = @Model.product_variants.Where(e => e.ProductID == @item.ProductID).Select(e => e.Var_Discount).FirstOrDefault();
                             var price = @Model.product_variants.Where(e => e.ProductID == @item.ProductID).Select(e => e.Var_Price).FirstOrDefault();
                             @discount = @discount + @price;
-                            }
- 
-                    <p class="price">@price</p>
+                        }
+
+                        <p class="price">@price</p>
                         <p class="price through">@discount</p>
                         <label>@Model.subSubCategories.Where(e => e.SubSubCategoryID == @item.SubSubCategoryID).Select(e => e.SubsUBCategoryName).FirstOrDefault()</label>
 
                         @*<a class="btn btn-link detail_product" data-id="@item.ProductID" > Detail</a>*@
-                        @Html.ActionLink("Detail", "Product", "catalog", new { id = @item.ProductID, variant = 0},new { @class="btn btn-link"})
+                        @Html.ActionLink("Detail", "Product", "catalog", new { id = @item.ProductID, variant = 0 }, new { @class = "btn btn-link" })
                         <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
                     </div>
                 </div>
@@ -194,48 +199,48 @@
 
 
         @*<div class="col-sm-6 col-md-3 product product_card invisible">
-            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-            <a href="./"><img src="../assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
+                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                <a href="./"><img src="../assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
 
-            <div class="content">
-                <h1 class="h4">HP Chromebook 14</h1>
-                <p class="sale">$209.99</p>
-                <p class="price through">$249.99</p>
-                <label>Laptops</label>
+                <div class="content">
+                    <h1 class="h4">HP Chromebook 14</h1>
+                    <p class="sale">$209.99</p>
+                    <p class="price through">$249.99</p>
+                    <label>Laptops</label>
 
-                <a href="../catalog/product.html" class="btn btn-link"> Details</a>
-                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                </div>
             </div>
-        </div>
 
-        <div class="col-sm-6 col-md-3 product product_card invisible">
-            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-            <a href="./"><img src="../assets/img/products/chrome-book-asus.jpg" alt="HP Chromebook 14" /></a>
+            <div class="col-sm-6 col-md-3 product product_card invisible">
+                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                <a href="./"><img src="../assets/img/products/chrome-book-asus.jpg" alt="HP Chromebook 14" /></a>
 
-            <div class="content">
-                <h1 class="h4">Asus Chromebook</h1>
-                <p class="price">$299.99</p>
-                <label>Laptops</label>
+                <div class="content">
+                    <h1 class="h4">Asus Chromebook</h1>
+                    <p class="price">$299.99</p>
+                    <label>Laptops</label>
 
-                <a href="../catalog/product.html" class="btn btn-link"> Details</a>
-                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                </div>
             </div>
-        </div>
 
-        <div class="col-sm-6 col-md-3 product product_card product_card">
-            <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
-            <a href="./"><img src="../assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
+            <div class="col-sm-6 col-md-3 product product_card product_card">
+                <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                <a href="./"><img src="../assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
 
-            <div class="content">
-                <h1 class="h4">HP Chromebook 14</h1>
-                <p class="sale">$209.99</p>
-                <p class="price through">$249.99</p>
-                <label>Laptops</label>
+                <div class="content">
+                    <h1 class="h4">HP Chromebook 14</h1>
+                    <p class="sale">$209.99</p>
+                    <p class="price through">$249.99</p>
+                    <label>Laptops</label>
 
-                <a href="../catalog/product.html" class="btn btn-link"> Details</a>
-                <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
-            </div>
-        </div>*@
+                    <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                    <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                </div>
+            </div>*@
     </div>
     <div class="container" style="text-align:center">
         <a class="btn btn-link" style="text-align:center;margin-top:20px; align-items:center" id="Product_Card_See_More" onclick="Expand_Product_Card()">See More...</a>
@@ -306,7 +311,7 @@
              cards_dispaly[i].style.display = "block";
         }
         total_card_to_display = total_card_to_display + 8;
-      
+
     }
     $("#category_ddl").change(function () {
         var end =this.value;
@@ -324,12 +329,11 @@
 </script>
 <script>
     var total_card_to_display = 4;
-        document.getElementsByClassName('product_card_overflow').onload = function () { myFunction() };
-         var cards_dispaly = document.getElementsByClassName('product_card_overflow');
-         for (var i = 0; i < total_card_to_display && cards_dispaly.length; i++)
-         {
+    document.getElementsByClassName('product_card_overflow').onload = function () { myFunction() };
+    var cards_dispaly = document.getElementsByClassName('product_card_overflow');
+    for (var i = 0; i < total_card_to_display && cards_dispaly.length; i++) {
         cards_dispaly[i].style.display = "block";
-        }
-        total_card_to_display = total_card_to_display + 8;
-    
+    }
+    total_card_to_display = total_card_to_display + 8;
+
 </script>
