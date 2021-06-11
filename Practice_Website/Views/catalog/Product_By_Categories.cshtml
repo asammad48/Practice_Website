@@ -1,0 +1,392 @@
+﻿@model Practice_Website.Models.Products_With_Categories
+@{
+    string images_path_local = "https://localhost:44365/uploads/";
+}
+<div class="row">
+    <!-- Filter -->
+    <div class="col-sm-3 filter">
+        <div class="item">
+            <div class="title">
+                <a href="#clear" data-action="open" class="down"> <i class="ion-android-arrow-dropdown"></i> Open</a>
+                <a href="#clear" data-action="clear"> <i class="ion-ios-trash-outline"></i> Clear</a>
+                <h1 class="h4">Type</h1>
+            </div>
+
+            <div class="controls grid">
+                @{
+                        var category_select = Model.categories.Where(e => e.Status == 1).Select(e => e.CategoryID).FirstOrDefault();
+                        var subCategry = Model.category_Subs.Where(e => e.CategoryID == category_select).Select(e => e.SubCategoryID).ToList();
+                        var Sub_Category_Table = Model.subCategories.Where(e => subCategry.Contains(e.SubCategoryID)).ToList();
+                        var subsubCategory = Model.subCategory_Subs.Where(e => subCategry.Contains(e.SubCategoryID)).Select(e => e.SubSubCategoryID).ToList();
+                        var Product = Model.products.Where(e => subsubCategory.Contains(e.SubSubCategoryID)).ToList();
+                        var Product_id_list = Product.Select(e => e.ProductID).ToList();
+                        var variants = Model.product_variants.Where(e => Product_id_list.Contains(e.ProductID)).Select(e => e.VariantID);
+                        var variants_list = Model.variants.Where(e => variants.Contains(e.VariantID)).ToList();
+                        foreach (var item in Sub_Category_Table)
+                        {
+                        <div class="checkbox-group" data-status="inactive">
+                            <div class="checkbox"><i class="ion-android-done"></i></div>
+                            <div class="label" data-value="@item.SubCategoryID">@item.SubCategoryName</div>
+                            <input type="checkbox" name="checkbox" value="">
+                        </div>
+                    }
+                }
+                @*<div class="checkbox-group" data-status="inactive">
+                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                    <div class="label" data-value="Laptops">Laptops</div>
+                    <input type="checkbox" name="checkbox" value="">
+                </div>
+
+                <div class="checkbox-group" data-status="inactive">
+                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                    <div class="label" data-value="Tablets">Tablets</div>
+                    <input type="checkbox" name="checkbox" value="">
+                </div>
+
+                <div class="checkbox-group" data-status="inactive">
+                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                    <div class="label" data-value="Hybrid">Hybrids</div>
+                    <input type="checkbox" name="checkbox" value="">
+                </div>*@
+            </div>
+        </div>
+
+        <br>
+
+        <div class="item">
+            <div class="title">
+                <a href="#clear" data-action="open" class="down"> <i class="ion-android-arrow-dropdown"></i> Open</a>
+                <a href="#clear" data-action="clear"> <i class="ion-ios-trash-outline"></i> Clear</a>
+                <h1 class="h4">Screen</h1>
+            </div>
+
+            <div class="controls grid">
+                @{ 
+                    foreach(var item in variants_list)
+                    {
+                                <div class="checkbox-group" data-status="inactive">
+                                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                                    <div class="label" data-value="@item.VariantID">@item.VariantName</div>
+                                    <input type="checkbox" name="checkbox" value="">
+                                </div>
+                    }
+                }
+                @*<div class="checkbox-group" data-status="inactive">
+                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                    <div class="label" data-value="7 in">7 in</div>
+                    <input type="checkbox" name="checkbox" value="">
+                </div>
+
+                <div class="checkbox-group" data-status="inactive">
+                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                    <div class="label" data-value="10 in">10 in</div>
+                    <input type="checkbox" name="checkbox" value="">
+                </div>
+
+                <div class="checkbox-group" data-status="inactive">
+                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                    <div class="label" data-value="11 in">11 in</div>
+                    <input type="checkbox" name="checkbox" value="">
+                </div>
+
+                <div class="checkbox-group" data-status="inactive">
+                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                    <div class="label" data-value="14 in">14 in</div>
+                    <input type="checkbox" name="checkbox" value="">
+                </div>
+
+                <div class="checkbox-group" data-status="inactive">
+                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                    <div class="label" data-value="15 in">15 in</div>
+                    <input type="checkbox" name="checkbox" value="">
+                </div>
+
+                <div class="checkbox-group" data-status="inactive">
+                    <div class="checkbox"><i class="ion-android-done"></i></div>
+                    <div class="label" data-value="17 in">17 in</div>
+                    <input type="checkbox" name="checkbox" value="">
+                </div>*@
+            </div>
+        </div>
+
+        <br>
+
+        <div class="item">
+            <div class="title">
+                <a href="#clear" data-action="open" class="down"> <i class="ion-android-arrow-dropdown"></i> Open</a>
+                <a href="#clear" data-action="clear-price"> <i class="ion-ios-trash-outline"></i> Clear</a>
+                <h1 class="h4">Price</h1>
+            </div>
+
+            <div class="controls">
+                <br>
+                <div id="slider-price"></div>
+                <br>
+                <p id="amount"></p>
+            </div>
+        </div>
+        <br>
+
+        <div class="item">
+            <div class="title">
+                <a href="#clear" data-action="open" class="down"> <i class="ion-android-arrow-dropdown"></i> Open</a>
+                <a href="#clear" data-action="clear"> <i class="ion-ios-trash-outline"></i> Clear</a>
+                <h1 class="h4">Manufacturer</h1>
+            </div>
+            @{ 
+                var manufacturers = Model.subSubCategories.Where(e => subsubCategory.Contains(e.SubSubCategoryID)).ToList();
+            }
+            <div class="controls grid">
+                @{
+                    foreach (var item in manufacturers)
+                    {
+                        <div class="checkbox-group" data-status="inactive">
+                            <div class="checkbox"><i class="ion-android-done"></i></div>
+                            <div class="label" data-value="@item.SubSubCategoryID">@item.SubsUBCategoryName</div>
+                            <input type="checkbox" name="checkbox" value="">
+                        </div>
+                    }
+                }
+                @*<div class="checkbox-group" data-status="inactive">
+                <div class="checkbox"><i class="ion-android-done"></i></div>
+                <div class="label" data-value="7 in">7 in</div>
+                <input type="checkbox" name="checkbox" value="">
+            </div>
+
+            <div class="checkbox-group" data-status="inactive">
+                <div class="checkbox"><i class="ion-android-done"></i></div>
+                <div class="label" data-value="10 in">10 in</div>
+                <input type="checkbox" name="checkbox" value="">
+            </div>
+
+            <div class="checkbox-group" data-status="inactive">
+                <div class="checkbox"><i class="ion-android-done"></i></div>
+                <div class="label" data-value="11 in">11 in</div>
+                <input type="checkbox" name="checkbox" value="">
+            </div>
+
+            <div class="checkbox-group" data-status="inactive">
+                <div class="checkbox"><i class="ion-android-done"></i></div>
+                <div class="label" data-value="14 in">14 in</div>
+                <input type="checkbox" name="checkbox" value="">
+            </div>
+
+            <div class="checkbox-group" data-status="inactive">
+                <div class="checkbox"><i class="ion-android-done"></i></div>
+                <div class="label" data-value="15 in">15 in</div>
+                <input type="checkbox" name="checkbox" value="">
+            </div>
+
+            <div class="checkbox-group" data-status="inactive">
+                <div class="checkbox"><i class="ion-android-done"></i></div>
+                <div class="label" data-value="17 in">17 in</div>
+                <input type="checkbox" name="checkbox" value="">
+            </div>*@
+            </div>
+        </div>
+    </div>
+    <!-- /// -->
+    <!-- Products -->
+    <div class="col-sm-9 products">
+        <div class="row">
+
+            @{
+                foreach (var item in Model.products)
+                {
+                    <div class="col-sm-6 col-md-4 product Product_Index">
+                        <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                        @{
+                            var images_url = images_path_local + Model.product_Images.Where(e => e.ProductID == item.ProductID).Select(e => e.Images).FirstOrDefault();
+                        }
+                        <a href="./"><img src="@images_url" alt="@item.ProductName" style="max-height: 195px; max-width:270px; min-width:270px; min-height:195px" /></a>
+
+                        <div class="content">
+                            <h1 class="h4">@item.ProductName</h1>
+                            @{var discount = @Model.product_variants.Where(e => e.ProductID == @item.ProductID).Select(e => e.Var_Discount).FirstOrDefault();
+                                var price = @Model.product_variants.Where(e => e.ProductID == @item.ProductID).Select(e => e.Var_Price).FirstOrDefault();
+                                @discount = @discount + @price;
+                            }
+
+                            <p class="price">@price</p>
+                            <label>@Model.subSubCategories.Where(e => e.SubSubCategoryID == @item.SubSubCategoryID).Select(e => e.SubsUBCategoryName).FirstOrDefault()</label>
+
+                            @*<a href="../catalog/product.html" class="btn btn-link"> Details</a>*@
+                            @Html.ActionLink("Detail", "Product", "catalog", new { id = @item.ProductID, variant = 0 }, new { @class = "btn btn-link" })
+                            <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                        </div>
+                    </div>
+                }
+            }
+            @*<div class="col-sm-6 col-md-4 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="../assets/img/products/chrome-book-11.jpg" alt="HP Chromebook 11" /></a>
+
+                    <div class="content">
+                        <h1 class="h4">HP Chromebook 11</h1>
+                        <p class="price">$199.99</p>
+                        <label>Laptops</label>
+
+                        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>*@
+
+            @*<div class="col-sm-6 col-md-4 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="../assets/img/products/chrome-book-14.jpg" alt="HP Chromebook 14" /></a>
+
+                    <div class="content">
+                        <h1 class="h4">HP Chromebook 14</h1>
+                        <p class="sale">$209.99</p>
+                        <p class="price through">$249.99</p>
+                        <label>Laptops</label>
+
+                        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="../assets/img/products/chrome-book-asus.jpg" alt="HP Chromebook 14" /></a>
+
+                    <div class="content">
+                        <h1 class="h4">Asus Chromebook</h1>
+                        <p class="price">$299.99</p>
+                        <label>Laptops</label>
+
+                        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-6 col-md-4 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="../assets/img/products/ipad-air.jpg" alt="iPad Air" /></a>
+
+                    <div class="content">
+                        <h1 class="h4">iPad Air</h1>
+                        <p class="price">$449.99</p>
+                        <label>Tablets</label>
+
+                        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="../assets/img/products/ipad-mini.jpg" alt="iPad Mini" /></a>
+
+                    <div class="content">
+                        <h1 class="h4">iPad Mini</h1>
+                        <p class="price">$399.99</p>
+                        <label>Tablets</label>
+
+                        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="../assets/img/products/mi-pad-2.jpg" alt="Mi Pad 2/"></a>
+
+                    <div class="content">
+                        <h1 class="h4">Mi Pad 2</h1>
+                        <p class="sale">$199.99</p>
+                        <p class="price through">$249.99</p>
+                        <label>Tablets</label>
+
+                        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-6 col-md-4 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="../assets/img/products/surface-pro.jpg" alt="Surface Pro" /></a>
+
+                    <div class="content">
+                        <h1 class="h4">Surface Pro</h1>
+                        <p class="price">$199.99</p>
+                        <label>Hybrid</label>
+
+                        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="../assets/img/products/lenovo-yoga.jpg" alt="Lenovo Yoga" /></a>
+
+                    <div class="content">
+                        <h1 class="h4">Lenovo Yoga</h1>
+                        <p class="price">$199.99</p>
+                        <label>Hybrid</label>
+
+                        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 product">
+                    <a href="#favorites" class="favorites" data-favorite="inactive"><i class="ion-ios-heart-outline"></i></a>
+                    <a href="./"><img src="../assets/img/products/asus-transformer.jpg" alt="ASUS Transformer" /></a>
+
+                    <div class="content">
+                        <h1 class="h4">ASUS Transformer</h1>
+                        <p class="price">$199.99</p>
+                        <label>Hybrid</label>
+
+                        <a href="../catalog/product.html" class="btn btn-link"> Details</a>
+                        <button class="btn btn-primary btn-rounded btn-sm"> <i class="ion-bag"></i> Add to cart</button>
+                    </div>
+                </div>*@
+
+        </div>
+
+        <nav>
+            <ul class="pagination">
+                <li>
+                    <a href="#" aria-label="Previous" class="previous">
+                        <span aria-hidden="true"><i class="ion-ios-arrow-left"></i></span>
+                    </a>
+                </li>
+                @{
+                    int count = Model.products.ToList().Count();
+                    int total_page = 0;
+                    total_page = count / 9;
+                    if (count % 9 >= 1)
+                    {
+                        total_page++;
+                    }
+                    for (int i = 1; i <= total_page; i++)
+                    {
+                        if (i == 1)
+                        {
+                            <li class="active"><a id="@i" class="page_break">@i</a></li>
+                        }
+                        else
+                        {
+                            <li><a id="@i" class="page_break">@i</a></li>
+                        }
+                    }
+                }
+
+                @*<li><a href="#">3</a></li>
+                    <li class="disabled"><a href="#">..</a></li>
+                    <li><a href="#">10</a></li>*@
+                <li>
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true"><i class="ion-ios-arrow-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!-- /// -->
+</div>

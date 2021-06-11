@@ -16,5 +16,6 @@ namespace Practice_Website.Models
         public int Status { get; set; }
        
         public int SubSubCategoryID { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }
