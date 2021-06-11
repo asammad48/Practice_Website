@@ -246,12 +246,15 @@
     <p>Search by tags</p>
     <div class="btn-group" data-toggle="buttons">
         @{
+            var i = 0;
             //var selected_category=Model.c
             foreach (var item in Model.categories)
             {
-                <label class="btn btn-default btn-xs">
-                    <input type="radio" name="options" id="@item.CategoryID"> @item.CategoryName
-                </label>
+                    <label class="btn btn-default btn-xs">
+                        <input type="radio" name="options" id="@item.CategoryID"> @item.CategoryName
+                    </label>
+             
+
             }
         }
         @*<label class="btn btn-default btn-xs active">
@@ -275,7 +278,7 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container" id="Product_CategoriesAll">
     @Html.Partial("Product_By_Categories.cshtml",@Model)
 </div>
 <br><br>
@@ -319,7 +322,20 @@
             //console.log(i)
             $('.Product_Index').eq(i).css("display", "block");     
         }
-        
+       
     });
+     $('input[name="options"]').change(function () {
+        var end=$(this).attr('id');
+          $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetProductCategories", "Home", null)",
+                    data: { id: end },
+                    contentType: 'application/json; charset=utf-8',
+              success: function myfunction(Response) {
+                  $("#Product_CategoriesAll").html(Response)
+                    }, error: function (request, status, error) {
+                    }
+                });
+        });
 </script>
 

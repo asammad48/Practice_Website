@@ -109,5 +109,65 @@ namespace Practice_Website.Controllers
             Products_with_categories.Product = p;
             return View(Products_with_categories);
         }
+        [HttpPost]
+        public async Task<IActionResult> GetSubcategoryProduct(int subid)
+        {
+            Products_With_Categories Products_with_categories = new Products_With_Categories();
+
+            using (var client = new HttpClient())
+            {
+
+                client.BaseAddress = new Uri(Baseurl);
+
+                client.DefaultRequestHeaders.Clear();
+
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+                HttpResponseMessage Res = await client.GetAsync("api/Home");
+
+
+                if (Res.IsSuccessStatusCode)
+                {
+
+                    var All_Product = Res.Content.ReadAsStringAsync().Result;
+
+
+                    Products_with_categories = JsonConvert.DeserializeObject<Products_With_Categories>(All_Product);
+
+                }
+            }
+            //if (variant == 0)
+            //{
+            //    Products_with_categories.Variant = Products_with_categories.product_variants.Where(e => e.ProductID == id).Select(e => e.VariantID).FirstOrDefault();
+            //}
+            //Products_with_categories.Variant = variant;
+            int count = 1;
+            foreach (var item in Products_with_categories.subCategories)
+            {
+                if (subid == item.SubCategoryID)
+                {
+                    item.Status = 1;
+                }
+                else
+                {
+                    item.Status = 0;
+                }
+            }
+            int categoryid = Products_with_categories.category_Subs.Where(e => e.SubCategoryID == subid).Select(e => e.CategoryID).FirstOrDefault();
+            foreach (var item in Products_with_categories.categories)
+            {
+                if (categoryid == item.CategoryID)
+                {
+                    item.Status = 1;
+                }
+                else
+                {
+                    item.Status = 0;
+                }
+            }
+
+            return PartialView("/Views/catalog/Product_By_Categories.cshtml", Products_with_categories);
+        }
     }
 }
